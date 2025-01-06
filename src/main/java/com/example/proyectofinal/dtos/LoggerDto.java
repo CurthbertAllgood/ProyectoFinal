@@ -13,7 +13,8 @@ public class LoggerDto {
 	private Level nivel;
 	private long id_Persona;
 
-	public LoggerDto(Integer id, String userId, LocalDate dia, LocalTime hora) {
+	// Constructor completo
+	public LoggerDto(Integer id, String userId, LocalDate dia, LocalTime hora, String mensaje, Level nivel, long id_Persona) {
 		this.id = id;
 		this.userId = userId;
 		this.dia = dia;
@@ -23,13 +24,18 @@ public class LoggerDto {
 		this.id_Persona = id_Persona;
 	}
 
-	public LoggerDto(LocalDate now, LocalTime now1, String userId, Long personaId) {
+	// Constructor simplificado sin id (utilizado para crear nuevos logs)
+	public LoggerDto(LocalDate dia, LocalTime hora, String userId, long id_Persona) {
+		this.dia = dia;
+		this.hora = hora;
+		this.userId = userId;
+		this.id_Persona = id_Persona;
 	}
 
 	// Getters y Setters
 
-	public String getId() {
-		return String.valueOf(id);
+	public Integer getId() {
+		return id;
 	}
 
 	public void setId(Integer id) {

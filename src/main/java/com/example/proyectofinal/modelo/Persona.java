@@ -2,51 +2,38 @@ package com.example.proyectofinal.modelo;
 
 import com.example.proyectofinal.dtos.DomicilioDto;
 import com.example.proyectofinal.dtos.ReclamoDto;
-
 import com.example.proyectofinal.dtos.UsuarioDto;
 import java.util.List;
 
 public abstract class Persona {
-	
-    private String rol;
-    
-    private Long PersonaId;
-    
-    private String nombre;
 
-    private String apellido;
-
-    private Float dni;
-
-    private String email;
-
-    private Float telefono;
-    
-    private List<DomicilioDto> Domicilio;
-
-    private List<UsuarioDto> Usuario;
-
-    private List<ReclamoDto> Reclamoid;
+	private String rol;
+	private Long personaId;
+	private String nombre;
+	private String apellido;
+	private Float dni;
+	private String email;
+	private Float telefono;
+	private List<DomicilioDto> domicilio;
+	private List<UsuarioDto> usuario;
+	private List<ReclamoDto> reclamoId;
 
 	public Persona(String rol, Long id, String nombre, String apellido, int DNI, String email, int tele) {
 		setRol(rol);
 		setPersonaId(id);
 		setNombre(nombre);
 		setApellido(apellido);
-		setDni(dni);
+		setDni((float) DNI);
 		setEmail(email);
-		setTelefono(telefono);
+		setTelefono((float) tele);
 	}
 
 	public Persona(Long id, String nombre, String apellido, String rol) {
-		this.PersonaId = id;
+		this.personaId = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.rol = rol;
-		
 	}
-	
-
 
 	public String getRol() {
 		return rol;
@@ -57,11 +44,11 @@ public abstract class Persona {
 	}
 
 	public Long getPersonaId() {
-		return PersonaId;
+		return personaId;
 	}
 
-	public void setPersonaId(Long PersonaId) {
-		this.PersonaId = PersonaId;
+	public void setPersonaId(Long personaId) {
+		this.personaId = personaId;
 	}
 
 	public String getNombre() {
@@ -105,36 +92,34 @@ public abstract class Persona {
 	}
 
 	public List<DomicilioDto> getDomicilio() {
-		return Domicilio;
+		return domicilio;
 	}
 
-	public void setDomicilio(List<DomicilioDto> Domicilio) {
-		this.Domicilio = Domicilio;
+	public void setDomicilio(List<DomicilioDto> domicilio) {
+		this.domicilio = domicilio;
 	}
 
 	public List<UsuarioDto> getUsuario() {
-		return Usuario;
+		return usuario;
 	}
 
-	public void setUsuario(List<UsuarioDto> Usuario) {
-		this.Usuario = Usuario;
+	public void setUsuario(List<UsuarioDto> usuario) {
+		this.usuario = usuario;
 	}
 
-	public List<ReclamoDto> getReclamoid() {
-		return Reclamoid;
+	public List<ReclamoDto> getReclamoId() {
+		return reclamoId;
 	}
 
-	public void setReclamoid(List<ReclamoDto> Reclamoid) {
-		this.Reclamoid = Reclamoid;
+	public void setReclamoId(List<ReclamoDto> reclamoId) {
+		this.reclamoId = reclamoId;
 	}
-	
-	public String getReclamos(){
+
+	public String getReclamos() {
 		return null;
 	}
-	public String getLogs(){
+
+	public String getLogs() {
 		return null;
 	}
-    
-	
-
 }

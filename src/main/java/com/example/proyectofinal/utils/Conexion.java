@@ -1,41 +1,38 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.proyectofinal.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.io.InputStream;
+import java.io.IOException;
 
-/**
- *
- * @author VGRCAORT
- */
-public class Conexion{
+public class Conexion {
+    private static String DRIVER;
+    private static String URL;
+    private static String USUARIO;
+    private static String CONTRASENIA;
 
-    private static Connection con;
-
-    private Conexion(){
-
-    }
-
-    public static Connection getConexion(String DRIVER, String URL, String usuario, String contrasenia) {
-        con=null;
-        if (con == null) {
-            try {
-                Class.forName(DRIVER); // Chequeo de Driver (sujeto a excepciones)
-                con = DriverManager.getConnection(URL, usuario, contrasenia); // Obtener la conexión
-                System.out.println("Conexión exitosa: " + con.getClass().getName());
-            } catch (ClassNotFoundException ex) {
-                throw new RuntimeException("No se encuentra driver " + DRIVER, ex);
-            } catch (SQLException ex) {
-                throw new RuntimeException("No se pudo establecer conexión con la BD", ex);
+    static {
+        try (InputStream input = Conexion.class.getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                System.out.println("Sorry, unable to find config.properties");
+                throw new ExceptionInInitializerError("Sorry, unable to find config.properties");
             }
+            Properties prop = new Properties();
+            prop.load(input);
+            DRIVER = prop.getProperty("db.driver");
+            URL = prop.getProperty("db.url");
+            USUARIO = prop.getProperty("db.user");
+            CONTRASENIA = prop.getProperty("db.password");
+
+            Class.forName(DRIVER);
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new ExceptionInInitializerError("Error initializing database connection: " + ex.getMessage());
         }
-        return con;
     }
 
-
-
+    public static Connection getConexion() throws SQLException {
+        return DriverManager.getConnection(URL, USUARIO, CONTRASENIA);
+    }
 }

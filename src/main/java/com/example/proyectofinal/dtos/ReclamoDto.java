@@ -5,158 +5,117 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+public class ReclamoDto implements Serializable {
 
-public class ReclamoDto implements Serializable{
+	private Long idReclamo;
+	private String descripcion;
+	private LocalDate fechaCreacion;
+	private LocalDate fechaResolucion;
+	private CategoriaDto categoriaReclamo;
+	private Long idDomicilio;
+	private EstadoReclamoDto estado;
+	private String detalleResolucion;
+	private Long idPersona;
 
-	
-    private Long idReclamo;
-    
-    private String descripcion;
-    
-    private LocalDate fechaCrecion;
-    
-    private LocalDate fechaResolucion;
-
-    private CategoriaDto categoriaReclamo;
-
-    private Long idDomicilio;
-
-    private EstadoReclamoDto Estado;
-
-    private String DetalleResolucion;
-    
-    private Long idPersona;
-
-	
-	public ReclamoDto(){
-		
+	public ReclamoDto() {
 	}
 
-
-	public ReclamoDto(Long id, String descripcion, LocalDate fechaCreacion, LocalDate fechaResolucion, String categoria, Long idPersona) {
+	public ReclamoDto(Long id, String descripcion, LocalDate fechaCreacion, LocalDate fechaResolucion, String categoriaReclamo, Long idPersona) {
 		setId(id);
 		setDescripcion(descripcion);
 		setFechaCreacion(fechaCreacion);
 		setFechaResolucion(fechaResolucion);
-		setCategoria(categoria);
+		setCategoria(categoriaReclamo);
 		setPersona(idPersona);
 	}
 
 	public ReclamoDto(String descripcion, LocalDate fechaCreacion, String categoria, Long idPersona) {
 		setDescripcion(descripcion);
 		setFechaCreacion(fechaCreacion);
-		setCategoria(getCategoria());
+		setCategoria(categoria);
 		setPersona(idPersona);
 	}
 
-
-
-	//Getters 
-	
-	public Long getId(){
+	// Getters
+	public Long getId() {
 		return idReclamo;
 	}
-	
-	public String getDescripcion(){
+
+	public String getDescripcion() {
 		return descripcion;
 	}
-	
-	public String getFechaCreacion(){
-		return String.valueOf(Date.valueOf(fechaCrecion));
+
+	public String getFechaCreacion() {
+		return String.valueOf(Date.valueOf(fechaCreacion));
 	}
-	
-	public Date getFechaResolucion(){
+
+	public Date getFechaResolucion() {
 		return Date.valueOf(fechaResolucion);
 	}
-	
-	public String getDetalle(){
-		return DetalleResolucion;
-	}
-	
-	public String getCategoria(){
-		return String.valueOf(categoriaReclamo);
 
+	public String getDetalle() {
+		return detalleResolucion;
 	}
-	
-	
-	public Long getIdDomicilio(){
+
+	public String getCategoria() {
+		return categoriaReclamo != null ? categoriaReclamo.name() : null;
+	}
+
+	public Long getIdDomicilio() {
 		return idDomicilio;
 	}
-	
-	
-	public EstadoReclamoDto getEstadoReclamo(){
-		EstadoReclamoDto er=null;
-		return er;
+
+	public EstadoReclamoDto getEstadoReclamo() {
+		return estado;
 	}
-	
-	public Long getIdPersona(){
+
+	public Long getIdPersona() {
 		return idPersona;
 	}
 
-	
-	// INICIO SETTERS
-	
-	//Set Id ReclamoDTO FUNCIONA
-	
-	public long setId(Long id){
-		if(id<0){
+	// Setters
+	public void setId(Long id) {
+		if (id < 0) {
 			throw new RuntimeException("Valor de ID incorrecto");
 		}
-		return	this.idReclamo=id;
+		this.idReclamo = id;
 	}
 
-	//Set Descripcion de reclamo FUNCIONA
-
-	public String setDescripcion(String Descripcion) {
-		
-		return this.descripcion=Descripcion;
-		
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
-	//Set fecha de resolucion NO FUNCIONA, tira null pointer exception
-	
 	public void setFechaResolucion(LocalDate fechaResolucion) {
-		if(fechaCrecion!=null) {
-			this.fechaResolucion = LocalDate.now();
+		if (fechaCreacion != null) {
+			this.fechaResolucion = fechaResolucion;
 		}
-
 	}
-	
-	
-	//set fecha Creacion FUNCIONA
 
 	public void setFechaCreacion(LocalDate fechaCreacion) {
-		try{
-		LocalDate fechaFinal= fechaCreacion;
-		this.fechaCrecion = fechaFinal;
-		}catch(DateTimeParseException ex){
+		try {
+			this.fechaCreacion = fechaCreacion;
+		} catch (DateTimeParseException ex) {
 			throw new RuntimeException("La fecha de reclamo no es válida", ex);
 		}
 	}
-	//Setea detalles de resolucion de incidente, por el momento NO FUNCIONA
-	
+
 	public void setDetalleResolucion(String detalle) {
-		if(DetalleResolucion==null || detalle.trim().isEmpty()){
-			DetalleResolucion="el reclamo sigue en revision";
+		if (detalle == null || detalle.trim().isEmpty()) {
+			detalleResolucion = "el reclamo sigue en revision";
+		} else {
+			this.detalleResolucion = detalle;
 		}
-		this.DetalleResolucion=detalle;
 	}
 
-	//NO SE SETEO TODAVIA
 	public void setCategoria(String categoria) {
-        CategoriaDto.valueOf(categoria);
-    }
-
-	
-	// NO SE SETEO TODAVIA
-	public void setPersona(Long idPersona) {
-		Long persona=idPersona;
+		if (categoria != null && !categoria.isEmpty()) {
+			this.categoriaReclamo = CategoriaDto.valueOf(categoria);
+		} else {
+			throw new IllegalArgumentException("Categoría no puede ser nula o vacía");
+		}
 	}
 
-
-
-
+	public void setPersona(Long idPersona) {
+		this.idPersona = idPersona;
+	}
 }
-	
-		
-

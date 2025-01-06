@@ -12,46 +12,46 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/**
- *
- * @author VGRCAORT
- */
 public class UsuarioDAO {
-	private String user;
-	private String password;
 	private PersonaFactory model;
 	private UsuarioDto usu;
 	private LoggerDto log;
 
-	private String GET_USER=("SELECT * FROM Usuario where id_Usuario='"+user+"'");
-	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static final String URL = "jdbc:mysql://localhost:3306/municipio_ortiz_carlos?allowPublicKeyRetrieval=true&useSSL=false";
-	private static final String usuario = "root";
-	private static final String contrasenia = "Prisma01";
-	private Conexion generaConexion;
-
-
-
-	public Persona autenticar(String user, String password) throws ClassNotFoundException, SQLException{
+	public Persona autenticar(String user, String password) throws SQLException {
 		Persona p = null;
-		usu= new UsuarioDto(user, password);
-		Logger logger= new Logger();
-		try(Connection con = Conexion.getConexion(DRIVER, URL, usuario, contrasenia);
-			PreparedStatement ps= con.prepareStatement("SELECT rol, id_Persona, Nombre, Apellido FROM persona WHERE id_Persona = (SELECT id_Persona FROM usuario WHERE Contraseña='" +usu.getPass()+ "' AND id_Usuario='"+usu.getUserId()+"')")){
-			try(ResultSet rs= ps.executeQuery()){
-				if(rs.next()){
-					p= model.crearPersona(rs.getString(1), rs.getLong(2), rs.getString(3), rs.getString(4));
-					log = new LoggerDto(LocalDate.now(), LocalTime.now(),usu.getUserId(),p.getPersonaId());
-					logger.addLog(log);
+		usu = new UsuarioDto(user, password);
+		LoggerDAO logger = new LoggerDAO();
+		try (Connection con = Conexion.getConexion();
+			 PreparedStatement ps = con.prepareStatement("SELECT u.rol, p.IdPersona, p.nombre, p.apellido FROM usuario u INNER JOIN persona p ON u.IdPersona = p.IdPersona WHERE u.contrasena = ? AND u.nombre_usuario = ?")) {
+			ps.setString(1, usu.getPass());
+			System.out.println("Password: " + usu.getPass());
+			ps.setString(2, usu.getUserId());
+			System.out.println("User ID: " + usu.getUserId());
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					System.out.println("Creating Persona instance...");
+					p = PersonaFactory.crearPersona(rs.getString("rol"), rs.getLong("IdPersona"), rs.getString("nombre"), rs.getString("apellido"));
+					if (p != null) {
+						log = new LoggerDto(LocalDate.now(), LocalTime.now(), usu.getUserId(), p.getPersonaId());
+						logger.addLog(log);
+						System.out.println("User authenticated successfully. Persona ID: " + p.getPersonaId());
+					} else {
+						System.err.println("Failed to create Persona instance.");
+					}
+				} else {
+					System.out.println("User authentication failed. No matching records found.");
 				}
 			} catch (SQLException ex) {
+				System.err.println("SQL Error: " + ex.getMessage());
 				throw new RuntimeException("Error de SQL", ex);
 			} catch (Exception ex) {
+				System.err.println("Error: " + ex.getMessage());
 				throw new RuntimeException("Error al agregar Usuario", ex);
 			}
-
+		} catch (SQLException ex) {
+			System.err.println("Connection Error: " + ex.getMessage());
+			throw new RuntimeException("Error de conexión", ex);
 		}
-
 		return p;
 	}
 }

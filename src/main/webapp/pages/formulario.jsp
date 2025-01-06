@@ -33,7 +33,7 @@
 <body>
 <div class="formcenter">
     <div class="container container-form">
-        <form action="${pageContext.request.contextPath}/form" method="post">
+        <form action="${pageContext.request.contextPath}/reclamos" method="post">
             <div class="mb-3">
                 <label for="Detalle" class="form-label">Detalle</label>
                 <textarea class="form-control" id="Detalle" name="Detalle" rows="3"></textarea>
@@ -43,6 +43,11 @@
                 <input type="text" class="form-control" id="Direccion" name="Direccion">
             </div>
             <div class="mb-3">
+                <label for="fecha_creacion" class="form-label">Fecha de Creacion</label>
+                <input type="date" class="form-control" id="fecha_creacion" name="fecha_creacion">
+            </div>
+            <div class="mb-3">
+                <label for="inputState" class="form-label">Tipo de Reclamo</label>
                 <select id="inputState" name="tipoReclamo" class="form-select">
                     <option>PLUVIAL</option>
                     <option>ARBOLADO</option>

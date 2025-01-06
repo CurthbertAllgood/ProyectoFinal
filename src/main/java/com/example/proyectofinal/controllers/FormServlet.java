@@ -33,7 +33,7 @@ public class FormServlet extends HttpServlet {
 
         ReclamoDto reclamo = new ReclamoDto(descripcion, LocalDate.now(), tipoReclamo, idPersona);
         ReclamoDAO reclamoDAO = new ReclamoDAO();
-        reclamoDAO.add(reclamo);
+        reclamoDAO.addReclamo(reclamo);
         System.out.println("entraste a la generacion de datos");
 
         response.sendRedirect(request.getContextPath() + "/success");
